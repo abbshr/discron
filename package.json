@@ -1,0 +1,40 @@
+{
+  "name": "discron",
+  "version": "1.0.0",
+  "description": "分布式定时任务框架",
+  "main": "index.js",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "ran <abbshrsoufii@gmail.com>",
+  "license": "MIT",
+  "jest": {
+    "verbose": true,
+    "notify": true,
+    "collectCoverage": true,
+    "testEnvironment": "node",
+    "modulePaths": [
+      "<rootDir>"
+    ],
+    "roots": [
+      "<rootDir>/__tests__",
+      "<rootDir>/__mocks__"
+    ],
+    "coverageReporters": [
+      "text",
+      "text-summary"
+    ]
+  },
+  "dependencies": {
+    "await-sleep": "0.0.1",
+    "chance": "^1.0.18",
+    "ioredis": "^4.9.0"
+  },
+  "devDependencies": {
+    "jest": "^24.0.0",
+    "p-event": "^4.1.0"
+  }
+}

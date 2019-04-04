@@ -1,0 +1,13 @@
+.idea
+.DS_Store
+.vscode
+*.log
+yarn.lock
+build
+coverage
+node_modules
+server/views
+.happypack
+*.rej
+package-lock.json
+.dll

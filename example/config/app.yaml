@@ -1,0 +1,23 @@
+# discron 框架配置
+discron:
+  requestKeyPrefix: 'request:{queue}' # 请求队列名公共前缀
+  responseKey: 'response:{queue}' # 响应队列名
+  backOffDuration: 2000 # 失败回退时间间隔
+  scheduler: # 调度器
+    cleanerFrequency: 1000 # 过期任务清扫频率
+    grabLockFrequency: 1000 # 锁竞争频率
+    mutexCfg: # 互斥锁配置
+      resourceId: 'scheduler:mutex'
+      lockLeaseFactor: 0.5
+      lockExpire: 10000
+  redisCfg: # redis 配置
+    schema: "client:maersk:task:development:"
+
+# 任务配置
+tasks:
+  # 心跳探测任务
+  - delay: 10000
+    timeout: 60000
+  # 路由同步任务
+  - delay: 30000
+    timeout: 120000
