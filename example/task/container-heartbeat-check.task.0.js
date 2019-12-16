@@ -1,19 +1,19 @@
-module.exports = (app, loadCtx) =>
-  class ContainerHeartbeatCheckTask extends require('./task') {
-    constructor() {
-      super(app, loadCtx)
-    }
-
+module.exports =
+  class ContainerHeartbeatCheckTask {
     static get type() {
       return 0
     }
 
     static get config() {
-      return app.config.tasks[this.type]
+      return {
+        delay: 50e3,
+        timeout: 5e3,
+      }
     }
 
     async run() {
-      await this.init()
-      await this.ctx.service.netlink.checkNetLinkStatus()
+      console.log("ContainerHeartbeatCheckTask start", new Date())
+      await new Promise(resolve => setTimeout(resolve, 6e3))
+      console.log("ContainerHeartbeatCheckTask done", new Date())
     }
   }

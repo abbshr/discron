@@ -1,4 +1,4 @@
-const Discron = require('./discron')
+const Discron = require('..')
 
 // 启动调度器
 function startScheduler(tasks, config, logger) {
@@ -28,23 +28,30 @@ function startExecutor(tasks, config, logger) {
 }
 
 /**
- * @desc Task 必须按照固定的编号顺序加载
- * @param {*} ctx
- */
-function loadTasks(app, loadCtx) {
-  return [
-    require('./task/container-heartbeat-check.task.0')(app, loadCtx),
-    require('./task/gateway-routers-dispatch.task.1')(app, loadCtx),
-  ]
-}
-
-/**
  * 初始化任务机制
  */
-module.exports = async app => {
-  const loadCtx = await autoLoad(app, __dirname)
-  const tasks = loadTasks(app, loadCtx)
+const tasks = [
+  require('./task/container-heartbeat-check.task.0'),
+  require('./task/gateway-routers-dispatch.task.1'),
+]
 
-  startScheduler(tasks, app.config.discron, app.log)
-  startExecutor(tasks, app.config.discron, app.log)
+const config = {
+  requestKeyPrefix: 'request:{queue}',
+  responseKey: 'response:{queue}',
+  backOffDuration: 2000,
+  scheduler: {
+    cleanerFrequency: 1000,
+    grabLockFrequency: 1000,
+    mutexCfg: {
+      resourceId: 'scheduler:mutex',
+      lockLeaseFactor: 0.5,
+      lockExpire: 10000,
+    }
+  },
+  redisCfg: {
+    schema: "client:maersk:task:rankong-test:",
+  },
 }
+
+startScheduler(tasks, config, console)
+startExecutor(tasks, config, console)

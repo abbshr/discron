@@ -129,7 +129,9 @@ class Scheduler extends require('./discron') {
     this.cleaner = setTimeout(() => {
       const now = Date.now()
       for (const task of this.delaySlot) {
-        this.onTimeout(now, task)
+        if (task && task.queued) {
+          this.onTimeout(now, task)
+        }
       }
       this.cleaner.refresh()
     }, this.CLEANER_FREQUENCY)
@@ -198,6 +200,10 @@ class Scheduler extends require('./discron') {
       // log
       this.logger.error(err, '发起任务请求失败')
       return null
+    } finally {
+      // 无论成功与否, 都标记任务已发出
+      // (task 再次 delay 的时间点取决于 min(timeout [+ CLEANER_FREQUENCY], executing time))
+      taskRequest.markSent()
     }
   }
 }
